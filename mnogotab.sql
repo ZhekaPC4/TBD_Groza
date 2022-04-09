@@ -38,3 +38,22 @@ SELECT DISTINCT st.n_z, st.name, st.surname, st.date, SUBSTRING(st.n_group::varc
 FROM student_hobby sh, student st
 WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL and st.score = 5
 ORDER BY course, date
+/*15 Для каждого хобби вывести количество людей, которые им занимаются.. */
+SELECT hb.name, tt.countOfHobby
+FROM hobbies hb
+INNER JOIN
+(SELECT count(sh.id) as countOfHobby, sh.hobby_id
+FROM student_hobby sh
+WHERE sh.finished_at IS NULL
+GROUP BY sh.hobby_id) tt
+ON tt.hobby_id = hb.id
+/*16 Вывести ИД самого популярного хобби. */
+SELECT hb.name, hb.id, tt.countOfHobby
+FROM hobbies hb
+INNER JOIN
+(SELECT count(sh.id) as countOfHobby, sh.hobby_id
+FROM student_hobby sh
+WHERE sh.finished_at IS NULL
+GROUP BY sh.hobby_id) tt
+ON tt.hobby_id = hb.id
+ORDER BY countOfHobby DESC LiMit 1
