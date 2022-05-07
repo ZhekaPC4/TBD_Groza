@@ -53,14 +53,6 @@ INNER JOIN student_hobby sh on sh.id = hb.id AND sh.finished_at IS NULL
 INNER JOIN student st on st.n_z = sh.id
 WHERE SUBSTRING(st.n_group::varchar, 1,1) = '2' AND st.score > 2 AND st.score < 4
 
---11. Создать представление, в котором отображается вся информация о студентах, которые продолжают заниматься хобби в данный момент и занимаются им как минимум 5 лет.
-SELECT *, 12 * extract(year from age(sh.finished_at, sh.started_at)) as hobby_years
-FROM student st
-INNER JOIN student_hobby sh on sh.n_z = st.n_z
-INNER JOIN hobbies hb on hb.id = sh.hobby_id
---Where sh.finished_at is null
---Этот номер не сделан
-
 /*12 Для каждого курса подсчитать количество различных действующих хобби на курсе. */
 SELECT count(sh.n_z), SUBSTRING(st.n_group::varchar, 1,1)
 FROM student_hobby sh, student st
@@ -72,6 +64,14 @@ SELECT DISTINCT st.n_z, st.name, st.surname, st.date, SUBSTRING(st.n_group::varc
 FROM student_hobby sh, student st
 WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL and st.score = 5
 ORDER BY course, date
+
+--14. Создать представление, в котором отображается вся информация о студентах, которые продолжают заниматься хобби в данный момент и занимаются им как минимум 5 лет.
+SELECT *, extract(year from age('2022-05-07', sh.started_at)) as hobby_years
+FROM student st
+INNER JOIN student_hobby sh on sh.n_z = st.n_z
+INNER JOIN hobbies hb on hb.id = sh.hobby_id
+Where sh.finished_at is null and extract(year from age('2022-05-07', sh.started_at)) >= 5
+--как делать представление? 
 
 /*15 Для каждого хобби вывести количество людей, которые им занимаются.. */
 SELECT hb.name, tt.countOfHobby
