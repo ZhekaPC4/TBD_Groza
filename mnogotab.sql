@@ -7,7 +7,7 @@ WHERE sh.n_z = st.n_z AND sh.hobby_id = hb.id;
 SELECT st.name, st.surname, sh.started_at
 FROM student st, student_hobby sh
 WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL
-ORDER BY sh.started_at
+ORDER BY sh.started_at Limit 1
 
 --3. Вывести имя, фамилию, номер зачетки и дату рождения для студентов, средний балл которых выше среднего, а сумма риска всех хобби, которыми он занимается в данный момент, больше 4
 SELECT st.name, st.surname, st.n_z, st.date, Sosy_biby.anime
@@ -119,5 +119,37 @@ Where risk >= (
 	Select risk
 	From hobbies
 	order by risk desc
-	Limit 1 offset 2
+	
+--19. Вывести 10 студентов, которые занимаются одним (или несколькими) хобби самое продолжительно время.
+
+SELECT st.name, st.surname, sh.started_at
+FROM student st, student_hobby sh
+WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL
+ORDER BY sh.started_at Limit 10
+
+--20.Вывести номера групп (без повторений), в которых учатся студенты из предыдущего запроса.
+Select distinct st.n_group
+from student st
+inner join (
+	SELECT st.name, st.surname, sh.started_at, st.n_group
+	FROM student st, student_hobby sh
+	WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL
+	ORDER BY sh.started_at Limit 10) tt
+On tt.n_group = st.n_groupLimit 1 offset 2
 )
+--19. Вывести 10 студентов, которые занимаются одним (или несколькими) хобби самое продолжительно время.
+
+SELECT st.name, st.surname, sh.started_at
+FROM student st, student_hobby sh
+WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL
+ORDER BY sh.started_at Limit 10
+
+--20.Вывести номера групп (без повторений), в которых учатся студенты из предыдущего запроса.
+Select distinct st.n_group
+from student st
+inner join (
+	SELECT st.name, st.surname, sh.started_at, st.n_group
+	FROM student st, student_hobby sh
+	WHERE st.n_z = sh.n_z AND sh.finished_at IS NULL
+	ORDER BY sh.started_at Limit 10) tt
+On tt.n_group = st.n_group
