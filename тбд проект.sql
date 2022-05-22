@@ -65,5 +65,17 @@ select price from menu where dish_id = '1';
 
 --уточнения:
 --корзина и история общая для всех, но когда к ним получает доступ юзер он получает только те записи где user_id его собсвенный
+Select* from bucket where user_id= '1';
+Select* from history where user_id= '1';
+
 --повторение заказа это не более чем копирование значение поля user_order из history в поле dishes из таблицы bucket 
+Select user_order from history where id='1';
+--обрабатываем на сайте, читаю посимвольно получаем список продуктов и пересчитываем цену каждого многократно вызывая
+Select price from menu where dish_id = '1';
+--Прочитав весь список бюд мы вносим в бкорзину общую сумму за них и за добавляем все блюда в корзину
+Update bucket set total_price = '6' where user_id = '1';
+Update bucket set dishes = '1,2' where user_id = '1;
+
 --управляющий может менять статус заказа с помощью поля status в разделе history
+Update history set status='в работе' where id='1';
+Update history set status='готово' where id='1';
